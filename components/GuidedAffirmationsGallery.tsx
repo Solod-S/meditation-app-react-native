@@ -29,7 +29,7 @@ export function GuidedAffirmationsGallery({
               //   pathname: "/affirmations/[id]",
               //   params: { id: item.id.toString() }, // Преобразуем `id` в строку
               // }}
-              href={`/affirmations/${item.id}`}
+              href={`/affirmation/${item.id}`}
               asChild
             >
               <Pressable>

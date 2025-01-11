@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { AppGradient, GuidedAffirmationsGallery } from "@/components";
-import AFFIRMATION_GALLERY from "@/constants/affirmation-gallary";
+import AFFIRMATION_GALLERY from "@/constants/affirmation-gallery";
 
 export default function Affirmation() {
   return (
