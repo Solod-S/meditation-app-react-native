@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 
 import { CustomButton, AppGradient } from "@/components";
 import home from "@/assets/meditation-images/home.jpg";
+
 export default function App() {
   const router = useRouter();
   return (
