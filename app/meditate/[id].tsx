@@ -1,86 +1,96 @@
-import { View, Text, ImageBackground, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useContext, useEffect, useState } from "react";
+import { ImageBackground, Pressable, Text, View } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { Audio } from "expo-av";
-
-import { MEDITATION_DATA, AUDIO_FILES } from "@/constants/MeditationData";
-import MEDITATION_IMAGES from "@/constants/meditation-images";
 import { AppGradient, CustomButton } from "@/components";
-import { useLocalSearchParams, useRouter } from "expo-router";
 
-export default function Meditate() {
+import MEDITATION_IMAGES from "@/constants/meditation-images";
+import { TimerContext } from "@/context/TimerContext";
+import { MEDITATION_DATA, AUDIO_FILES } from "@/constants/MeditationData";
+
+const Page = () => {
   const { id } = useLocalSearchParams();
-  const router = useRouter();
-  const [secondsRemaining, setSecondsRemaining] = useState(10);
-  const [isMeditating, setIsMeditating] = useState(false);
-  const [audioSound, setAudioSound] = useState<Audio.Sound>();
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  // clean audio on exit
-  useEffect(() => {
-    return () => {
-      audioSound?.unloadAsync();
-    };
-  }, [audioSound]);
+  const { duration: secondsRemaining, setDuration } = useContext(TimerContext);
 
-  // timer
+  const [isMeditating, setMeditating] = useState(false);
+  const [audioSound, setSound] = useState<Audio.Sound>();
+  const [isPlayingAudio, setPlayingAudio] = useState(false);
+
   useEffect(() => {
     let timerId: NodeJS.Timeout;
 
-    // Exit
+    // Exit early when we reach 0
     if (secondsRemaining === 0) {
-      setIsMeditating(false);
+      if (isPlayingAudio) audioSound?.pauseAsync();
+      setMeditating(false);
+      setPlayingAudio(false);
       return;
     }
 
     if (isMeditating) {
+      // Save the interval ID to clear it when the component unmounts
       timerId = setTimeout(() => {
-        setSecondsRemaining(prevState => prevState - 1);
+        setDuration(secondsRemaining - 1);
       }, 1000);
     }
 
+    // Clear timeout if the component is unmounted or the time left changes
     return () => {
       clearTimeout(timerId);
     };
   }, [secondsRemaining, isMeditating]);
 
-  // Format the time to ensure two digits are displayed
+  // Clear audio on exit
+  useEffect(() => {
+    return () => {
+      setDuration(10);
+      audioSound?.unloadAsync();
+    };
+  }, [audioSound]);
 
-  const formattedTimeTuMinutes = String(
-    Math.floor(secondsRemaining / 60)
-  ).padStart(2, "0");
+  const initializeSound = async () => {
+    const audioFileName = MEDITATION_DATA[Number(id) - 1].audio;
 
-  const formattedTimeSeconds = String(
-    Math.floor(secondsRemaining % 60)
-  ).padStart(2, "0");
-
-  const toggleMeditationSessionStatus = async () => {
-    if (secondsRemaining === 0) setSecondsRemaining(10);
-    setIsMeditating(!setIsMeditating);
-    await toggleSound();
+    const { sound } = await Audio.Sound.createAsync(AUDIO_FILES[audioFileName]);
+    setSound(sound);
+    return sound;
   };
 
-  const toggleSound = async () => {
-    const sound = audioSound ? audioSound : await initialSound();
+  const togglePlayPause = async () => {
+    const sound = audioSound ? audioSound : await initializeSound();
 
     const status = await sound?.getStatusAsync();
 
     if (status?.isLoaded && !isPlayingAudio) {
-      await sound.playAsync();
-      setIsPlayingAudio(true);
+      await sound?.playAsync();
+      setPlayingAudio(true);
     } else {
-      await sound.pauseAsync();
-      setIsPlayingAudio(false);
+      await sound?.pauseAsync();
+      setPlayingAudio(false);
     }
   };
 
-  const initialSound = async () => {
-    const soundFileName = MEDITATION_DATA[Number(id) - 1].audio;
+  async function toggleMeditationSessionStatus() {
+    if (secondsRemaining === 0) setDuration(10);
 
-    const { sound } = await Audio.Sound.createAsync(AUDIO_FILES[soundFileName]);
-    setAudioSound(sound);
-    return sound;
+    setMeditating(!isMeditating);
+
+    await togglePlayPause();
+  }
+
+  const handleAdjustDuration = () => {
+    if (isMeditating) toggleMeditationSessionStatus();
+
+    router.push("/(modal)/adjustMeditationDuration" as any);
   };
+
+  // Format the timeLeft to ensure two digits are displayed
+  const formattedTimeMinutes = String(
+    Math.floor(secondsRemaining / 60)
+  ).padStart(2, "0");
+  const formattedTimeSeconds = String(secondsRemaining % 60).padStart(2, "0");
 
   return (
     <View className="flex-1">
@@ -89,22 +99,30 @@ export default function Meditate() {
         resizeMode="cover"
         className="flex-1"
       >
-        <AppGradient colors={["transparent", "#18181b"]}>
+        <AppGradient colors={["transparent", "rgba(0,0,0,0.8)"]}>
           <Pressable
-            className="absolute top-16 left-6 z-10"
             onPress={() => router.back()}
+            className="absolute top-16 left-6 z-10"
           >
             <AntDesign name="leftcircleo" size={50} color="white" />
           </Pressable>
+
           <View className="flex-1 justify-center">
             <View className="mx-auto bg-neutral-200 rounded-full w-44 h-44 justify-center items-center">
-              <Text className="font-rmono text-4xl text-blue-800">
-                {formattedTimeTuMinutes}:{formattedTimeSeconds}
+              <Text className="text-4xl text-blue-800 font-rmono">
+                {formattedTimeMinutes}.{formattedTimeSeconds}
               </Text>
             </View>
           </View>
+
           <View className="mb-5">
             <CustomButton
+              title="Adjust duration"
+              onPress={handleAdjustDuration}
+            />
+            <CustomButton
+              type={isPlayingAudio ? "warning" : "standard"}
+              containerStyles="mt-4"
               title={isPlayingAudio ? "Stop Meditation" : "Start Meditation"}
               onPress={toggleMeditationSessionStatus}
             />
@@ -113,4 +131,6 @@ export default function Meditate() {
       </ImageBackground>
     </View>
   );
-}
+};
+
+export default Page;
