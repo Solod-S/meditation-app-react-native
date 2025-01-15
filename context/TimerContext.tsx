@@ -8,12 +8,16 @@ import {
 
 interface TimerContextType {
   duration: number;
+  totalDuration: number;
   setDuration: Dispatch<SetStateAction<number>>;
+  setTotalDuration: Dispatch<SetStateAction<number>>;
 }
 
 export const TimerContext = createContext<TimerContextType>({
-  duration: 10,
+  duration: 60,
+  totalDuration: 60,
   setDuration: () => {},
+  setTotalDuration: () => {},
 });
 
 interface TimerProviderProps {
@@ -21,10 +25,13 @@ interface TimerProviderProps {
 }
 
 const TimerProvider = ({ children }: TimerProviderProps) => {
-  const [duration, setDuration] = useState(10);
+  const [duration, setDuration] = useState(60);
+  const [totalDuration, setTotalDuration] = useState(60);
 
   return (
-    <TimerContext.Provider value={{ duration, setDuration }}>
+    <TimerContext.Provider
+      value={{ duration, setDuration, totalDuration, setTotalDuration }}
+    >
       {children}
     </TimerContext.Provider>
   );

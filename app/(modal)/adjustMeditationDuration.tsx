@@ -7,11 +7,12 @@ import { TimerContext } from "@/context/TimerContext";
 
 export default function AdjustMeditationDuration() {
   const router = useRouter();
-  const { setDuration } = useContext(TimerContext);
+  const { setDuration, setTotalDuration } = useContext(TimerContext);
 
   const handlePress = (duration: number) => {
-    router.back();
     setDuration(duration);
+    setTotalDuration(duration);
+    router.back();
   };
 
   return (
@@ -30,8 +31,8 @@ export default function AdjustMeditationDuration() {
           <View>
             <CustomButton
               containerStyles="mb-5"
-              title="10 seconds"
-              onPress={() => handlePress(10)}
+              title="60 seconds"
+              onPress={() => handlePress(60)}
             />
             <CustomButton
               containerStyles="mb-5"

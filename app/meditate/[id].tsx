@@ -9,19 +9,28 @@ import MEDITATION_IMAGES from "@/constants/meditation-images";
 import { TimerContext } from "@/context/TimerContext";
 import { MEDITATION_DATA, AUDIO_FILES } from "@/constants/MeditationData";
 
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+
 const Page = () => {
   const { id } = useLocalSearchParams();
 
-  const { duration: secondsRemaining, setDuration } = useContext(TimerContext);
+  const {
+    duration: secondsRemaining,
+    setDuration,
+    totalDuration,
+    setTotalDuration,
+  } = useContext(TimerContext);
 
   const [isMeditating, setMeditating] = useState(false);
   const [audioSound, setSound] = useState<Audio.Sound>();
   const [isPlayingAudio, setPlayingAudio] = useState(false);
+  // const [totalDuration, setTotalDuration] = useState(60);
+
+  // const totalDuration = 600; // Example total duration in seconds (10 minutes)
 
   useEffect(() => {
     let timerId: NodeJS.Timeout;
 
-    // Exit early when we reach 0
     if (secondsRemaining === 0) {
       if (isPlayingAudio) audioSound?.pauseAsync();
       setMeditating(false);
@@ -30,22 +39,22 @@ const Page = () => {
     }
 
     if (isMeditating) {
-      // Save the interval ID to clear it when the component unmounts
       timerId = setTimeout(() => {
         setDuration(secondsRemaining - 1);
       }, 1000);
     }
 
-    // Clear timeout if the component is unmounted or the time left changes
     return () => {
       clearTimeout(timerId);
     };
   }, [secondsRemaining, isMeditating]);
 
-  // Clear audio on exit
   useEffect(() => {
     return () => {
-      setDuration(10);
+      if (Boolean(audioSound?.getStatusAsync())) {
+        setTotalDuration(60);
+        setDuration(60);
+      }
       audioSound?.unloadAsync();
     };
   }, [audioSound]);
@@ -73,10 +82,7 @@ const Page = () => {
   };
 
   async function toggleMeditationSessionStatus() {
-    if (secondsRemaining === 0) setDuration(10);
-
     setMeditating(!isMeditating);
-
     await togglePlayPause();
   }
 
@@ -86,7 +92,6 @@ const Page = () => {
     router.push("/(modal)/adjustMeditationDuration" as any);
   };
 
-  // Format the timeLeft to ensure two digits are displayed
   const formattedTimeMinutes = String(
     Math.floor(secondsRemaining / 60)
   ).padStart(2, "0");
@@ -108,11 +113,27 @@ const Page = () => {
           </Pressable>
 
           <View className="flex-1 justify-center">
-            <View className="mx-auto bg-neutral-200 rounded-full w-44 h-44 justify-center items-center">
-              <Text className="text-4xl text-blue-800 font-rmono">
-                {formattedTimeMinutes}.{formattedTimeSeconds}
-              </Text>
-            </View>
+            <AnimatedCircularProgress
+              size={176} // Размер круга
+              width={12}
+              fill={(secondsRemaining / totalDuration) * 100} // Прогресс // Процент убывания
+              tintColor="#FEB2B2"
+              backgroundColor="#ddd"
+              rotation={0}
+              lineCap="butt"
+              style={{
+                justifyContent: "center",
+                alignSelf: "center",
+              }}
+            >
+              {() => (
+                <View className="bg-neutral-200 rounded-full w-44 h-44 justify-center items-center">
+                  <Text className="text-4xl text-blue-800 font-rmono">
+                    {formattedTimeMinutes}.{formattedTimeSeconds}
+                  </Text>
+                </View>
+              )}
+            </AnimatedCircularProgress>
           </View>
 
           <View className="mb-5">
