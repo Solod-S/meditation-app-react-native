@@ -16,7 +16,7 @@ export default function App() {
           <SafeAreaView edges={["top"]} className="flex-1 px-1 justify-between">
             <View>
               <Text className="text-center text-white font-bold text-4xl">
-                Simple Meditation
+                Harmony Hub
               </Text>
               <Text className="text-center text-white text-regular text-2xl mt-3">
                 Simplifying Meditation for Everyone

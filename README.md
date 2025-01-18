@@ -1,50 +1,109 @@
-# Welcome to your Expo app 👋
+![Version](https://img.shields.io/badge/Version-1.0-blue.svg?cacheSeconds=2592000)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![runs with React Native](https://img.shields.io/badge/Runs%20with%20React%20Native-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://reactnative.dev/)
+[![runs with TypeScript](https://img.shields.io/badge/Runs%20with%20TypeScript-000.svg?style=flat-square&logo=typescript&labelColor=f3f3f3&logoColor=3178C6)](https://www.typescriptlang.org/)
+[![runs with Expo](https://img.shields.io/badge/Runs%20with%20Expo-000.svg?style=flat-square&logo=expo&labelColor=f3f3f3&logoColor=000020)](https://expo.dev/)
+[![runs with Nativewind](https://img.shields.io/badge/Runs%20with%20TailwindCSS-000.svg?style=flat-square&logo=tailwindcss&labelColor=f3f3f3&logoColor=06B6D4)](https://www.nativewind.dev/)
+[![runs with React Native Vector Icons](https://img.shields.io/badge/Runs%20with%20React%20Native%20Vector%20Icons-000.svg?style=flat-square&logo=react&labelColor=f3f3f3&logoColor=61DAFB)](https://github.com/oblador/react-native-vector-icons)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Harmony Hub
 
-## Get started
+![Harmony Hub](/assets/Banner-min.jpg)
 
-1. Install dependencies
+**Project Description:**
+
+Harmony Hub is a mobile application crafted to guide users toward a serene and mindful meditation experience, helping them achieve inner peace and mental clarity.
+
+Key Features:
+
+- Personalized Meditation Settings: Users can select from a variety of calming melodies and visually soothing backgrounds to create the perfect ambiance for their meditation sessions.
+- Customizable Timers: The app allows users to set meditation durations that fit seamlessly into their daily schedules, whether they prefer quick 5-minute mindfulness breaks or longer deep-focus sessions.
+- Affirmation Library: Users can access an extensive collection of uplifting affirmations to enhance their practice and cultivate positive thinking.
+- Offline Functionality: Harmony Hub is fully operational without an internet connection, ensuring a distraction-free meditation experience anytime, anywhere.
+
+Harmony Hub is the ideal companion for anyone seeking tranquility and balance in their busy lives, offering a tailored meditation experience that nurtures the mind, body, and soul.
+
+<div align="center">
+
+https://github.com/user-attachments/assets/f6aae45a-4514-4c27-b4c2-10e701ab5af9
+
+  <br />
+</div>
+
+**Main Technologies:**
+
+- React Native: React Native is a popular framework for building cross-platform mobile applications using JavaScript and React. It allows developers to write native apps for iOS and Android with a single codebase, offering seamless performance and a consistent user experience.
+
+- TypeScript: TypeScript is a powerful, statically typed programming language that builds on JavaScript, providing developers with enhanced tooling and error checking. Designed for building large-scale applications, it helps catch potential issues early through type annotations, making code more robust and maintainable. TypeScript seamlessly integrates with JavaScript, enabling incremental adoption while improving developer productivity and collaboration.
+
+- Expo: Expo is a powerful framework and platform for building React Native applications. It provides a set of tools and services to simplify development, such as managed workflows, over-the-air updates, and easy access to native APIs without requiring native code.
+
+- NativeWind: NativeWind brings the power of Tailwind CSS to React Native. It enables developers to style mobile applications using utility-first class names, making it easy to build responsive and maintainable designs without custom CSS.
+
+- React Native Vector Icons: React Native Vector Icons is a library that provides a wide selection of customizable vector icons for React Native applications. It supports various icon packs and allows developers to easily add scalable and visually appealing icons to their projects.
+
+## How to Install and Run Your React Native App Using Expo
+
+![React Native App](/assets/exp.png)
+
+### Prerequisites
+
+1. **Install Node.js**: Ensure you have Node.js installed. You can download it from [Node.js official website](https://nodejs.org/).
+2. **Install Expo CLI**: Install Expo globally by running:
 
    ```bash
-   npm install
+   npm install -g expo-cli
    ```
 
-2. Start the app
+3. Install a Mobile Emulator or Expo Go App:
 
-   ```bash
-    npx expo start
-   ```
+   Use a simulator/emulator for iOS or Android.
+   Or install the Expo Go app on your mobile device from the App Store or Google Play.
 
-In the output, you'll find options to open the app in a
+### Using Git (recommended)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Clone the project from github. Change "myproject" to your project name.
 
 ```bash
-npm run reset-project
+git clone https://github.com/Solod-S/meditation-app-react-native ./myproject
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Using manual download ZIP
 
-## Learn more
+1.  Download repository
+2.  Uncompress to your desired directory
 
-To learn more about developing your project with Expo, look at the following resources:
+### Install npm dependencies after installing (Git or manual download)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+cd myproject
+npm install
+```
 
-## Join the community
+### Start
 
-Join our community of developers creating universal apps.
+1. Start the Project
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```javascript
+npm start
+```
+
+2. Open the App on Your Device
+
+- Using Expo Go App:
+
+  - Scan the QR code with the Expo Go app.
+  - The app will load directly on your device.
+
+- Using an Emulator:
+
+  - iOS Simulator "i"
+  - iOS Simulator "a"
+
+3. Enjoy Your App!!!
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions or improvements, please create a pull request. For major changes, please open an issue first to discuss the changes.
+
+**_NOTE: PLEASE LET ME KNOW IF YOU DISCOVERED ANY BUG OR YOU HAVE ANY SUGGESTIONS_**
