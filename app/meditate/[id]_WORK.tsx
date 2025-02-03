@@ -8,9 +8,6 @@ import { AppGradient, CustomButton } from "@/components";
 import MEDITATION_IMAGES from "@/constants/meditation-images";
 import { TimerContext } from "@/context/TimerContext";
 import { MEDITATION_DATA, AUDIO_FILES } from "@/constants/MeditationData";
-import { useKeepAwake, deactivateKeepAwake } from "expo-keep-awake";
-
-import ProgressWheel from "react-native-progress-wheel";
 
 const Page = () => {
   const { id } = useLocalSearchParams();
@@ -33,8 +30,6 @@ const Page = () => {
       if (isPlayingAudio) audioSound?.pauseAsync();
       setMeditating(false);
       setPlayingAudio(false);
-      setTotalDuration(60);
-      setDuration(60);
       return;
     }
 
@@ -59,24 +54,10 @@ const Page = () => {
     };
   }, [audioSound]);
 
-  useEffect(() => {
-    useKeepAwake(); // Turn on the prohibition of turning off the screen
-    return () => {
-      deactivateKeepAwake(); // Turn off the dismounting ban
-    };
-  }, []);
-
   const initializeSound = async () => {
     const audioFileName = MEDITATION_DATA[Number(id) - 1].audio;
 
     const { sound } = await Audio.Sound.createAsync(AUDIO_FILES[audioFileName]);
-
-    // Добавляем обработчик завершения трека
-    sound.setOnPlaybackStatusUpdate(status => {
-      if (status.isLoaded && status.didJustFinish) {
-        sound.replayAsync(); // Повторяем трек заново
-      }
-    });
     setSound(sound);
     return sound;
   };
@@ -96,7 +77,7 @@ const Page = () => {
   };
 
   async function toggleMeditationSessionStatus() {
-    setMeditating(prevState => !prevState);
+    setMeditating(!isMeditating);
     await togglePlayPause();
   }
 
@@ -127,16 +108,7 @@ const Page = () => {
           </Pressable>
 
           <View className="flex-1 justify-center items-center">
-            <ProgressWheel
-              size={176} // Размер круга
-              width={12} // Ширина полоски прогресса
-              progress={(secondsRemaining / totalDuration) * 100} // Прогресс в процентах
-              color="#FEB2B2"
-              backgroundColor="#ddd"
-              animateFromValue={((secondsRemaining + 1) / totalDuration) * 100} // Добавляем плавность
-              duration={1000} // Продолжительность анимации в миллисекундах
-            />
-            <View className="absolute bg-neutral-200 rounded-full w-44 h-44 justify-center items-center">
+            <View className="bg-neutral-200 rounded-full w-44 h-44 justify-center items-center">
               <Text className="text-4xl text-blue-800 font-rmono">
                 {formattedTimeMinutes}.{formattedTimeSeconds}
               </Text>

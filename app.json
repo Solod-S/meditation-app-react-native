@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "simple-meditation-app",
+    "name": "Harmony Hub",
     "slug": "simple-meditation-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.solik098.harmonyhub"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7d94b02b-30b4-4b30-ae45-c863e6285f10"
+      }
     }
   }
 }
